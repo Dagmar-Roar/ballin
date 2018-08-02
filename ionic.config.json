@@ -1,6 +1,6 @@
 {
   "name": "ballin",
-  "app_id": "",
+  "app_id": "9eb32d25",
   "type": "ionic-angular",
   "integrations": {
     "cordova": {}
