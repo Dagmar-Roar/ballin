@@ -11,6 +11,15 @@
       <button ion-item *ngFor="let p of pages" (click)="openPage(p)">
         {{p.title}}
       </button>
+      <ion-item (click)="logout()" *ngIf="auth.authenticated">
+          <ion-icon name="log-out" item-left></ion-icon>
+          Log out
+        </ion-item>
+    
+        <ion-item (click)="login()" *ngIf="!auth.authenticated">
+          <ion-icon name="log-in" item-left></ion-icon>
+          Log in
+        </ion-item>
     </ion-list>
   </ion-content>
 

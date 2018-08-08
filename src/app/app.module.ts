@@ -11,29 +11,50 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Geolocation } from '@ionic-native/geolocation';
 
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireAuth } from 'angularfire2/auth';
+import { AuthService } from '../services/auth.service';
+import { firebaseConfig } from '../fireConfig/config';
+import { NgxErrorsModule } from '@ultimate/ngxerrors';
+
+import { LoginPage } from '../pages/login/login';
+import { SignupPage } from '../pages/signup/signup';
+
+
+
+
 @NgModule({
   declarations: [
     MyApp,
     MapComponent,
     ItemDetailsPage,
-    ListPage
+    ListPage,
+    LoginPage,
+    SignupPage
+
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp),
+    NgxErrorsModule,
+    AngularFireModule.initializeApp(firebaseConfig.fire),
+    IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     MapComponent,
     ItemDetailsPage,
-    ListPage
+    ListPage,
+    LoginPage,
+    SignupPage
   ],
   providers: [
     StatusBar,
     Geolocation,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    AuthService,
+    AngularFireAuth
   ]
 })
 export class AppModule {}

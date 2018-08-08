@@ -7,6 +7,9 @@ import { ListPage } from '../pages/list/list';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { LoginPage } from '../pages/login/login';
+
+import { AuthService} from '../services/auth.service'
 
 
 @Component({
@@ -16,10 +19,11 @@ export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
   // make HelloIonicPage the root (or first) page
-  rootPage = MapComponent;
+  rootPage;
   pages: Array<{title: string, component: any}>;
 
   constructor(
+    private auth: AuthService,
     public platform: Platform,
     public menu: MenuController,
     public statusBar: StatusBar,
@@ -30,7 +34,7 @@ export class MyApp {
     // set our app's pages
     this.pages = [
       { title: 'Map', component: MapComponent },
-      { title: 'My First List', component: ListPage }
+      { title: 'My First List', component: LoginPage }
     ];
   }
 
@@ -41,6 +45,20 @@ export class MyApp {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
+
+    this.auth.afAuth.authState
+    .subscribe(
+      user => {
+        if (user) {
+          this.rootPage = MapComponent;
+        } else {
+          this.rootPage = LoginPage;
+        }
+      },
+      () => {
+        this.rootPage = LoginPage;
+      }
+    );
   }
 
   openPage(page) {
@@ -48,5 +66,17 @@ export class MyApp {
     this.menu.close();
     // navigate to the new page if it is not the current page
     this.nav.setRoot(page.component);
+  }
+
+  login() {
+    this.menu.close();
+      this.auth.signOut();
+      this.nav.setRoot(LoginPage);
+  }
+
+  logout() {
+    this.menu.close();
+    this.auth.signOut();
+    this.nav.setRoot(MapComponent);
   }
 }

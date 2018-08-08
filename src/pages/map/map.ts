@@ -1,7 +1,9 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, Nav } from 'ionic-angular';
 import { markParentViewsForCheckProjectedViews } from '@angular/core/src/view/util';
-import { Geolocation } from '@ionic-native/geolocation'
+import { Geolocation } from '@ionic-native/geolocation';
+import { AuthService} from '../../services/auth.service';
+import { LoginPage} from '../login/login'
 declare var google;
 
 @Component({
@@ -11,8 +13,12 @@ declare var google;
 export class MapComponent {
   @ViewChild('map') mapElement: ElementRef;
   map: any;
+  place: string;
+
   constructor(public navCtrl: NavController,
-              public geolocation: Geolocation) {}
+              public nav: Nav,
+              public geolocation: Geolocation,
+              private auth: AuthService) {}
 
   ionViewDidLoad() {
     this.loadMap();
@@ -38,8 +44,8 @@ export class MapComponent {
       animation: google.maps.Animation.DROP,
       position: this.map.getCenter()
     });
-
-    let content = "<h4>INFO</h4>";
+    this.place = "antibes";
+    let content = `<h4> ${ this.place } </h4>`;
 
     console.log(marker);
     this.addInfoWindow(marker, content);
@@ -53,5 +59,16 @@ export class MapComponent {
     google.maps.event.addListener(marker,'click', () => {
       infoWindow.open(this.map, marker);
     });
+  }
+
+  login() {
+      this.auth.signOut();
+      this.nav.setRoot(LoginPage);
+  }
+
+  logout() {
+    console.log('biatch');
+    //this.auth.signOut();
+    this.nav.setRoot(LoginPage);
   }
 }
